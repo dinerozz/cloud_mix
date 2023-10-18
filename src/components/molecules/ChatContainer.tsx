@@ -82,9 +82,13 @@ export const ChatContainer = () => {
 
   return (
     <div className="flex flex-col h-full overflow-y-auto">
-      <MessageList typingIndicator={typing}>
+      <MessageList>
         {messages.map((message, index) => (
-          <Message key={index} content={message} />
+          <Message
+            isUser={message.sender !== "AI Assistant"}
+            key={index}
+            content={message}
+          />
         ))}
       </MessageList>
       <div className="flex justify-between items-center">

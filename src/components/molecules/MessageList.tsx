@@ -2,13 +2,9 @@ import React, { FC, ReactNode, useEffect, useRef } from "react";
 
 type TMessageListProps = {
   children: ReactNode;
-  typingIndicator: boolean;
 };
 
-export const MessageList: FC<TMessageListProps> = ({
-  children,
-  typingIndicator,
-}) => {
+export const MessageList: FC<TMessageListProps> = ({ children }) => {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

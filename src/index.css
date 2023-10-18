@@ -19,7 +19,20 @@
   animation: typingAnimation 1.5s infinite; /* Анимация будет повторяться бесконечно с длительностью 1.5 секунды */
 }
 
-.custom-hljs {
+.custom-hljs code {
   background-color: #fff !important;
+  height: 100%;
   padding: 0 !important;
 }
+
+.custom-hljs-user code {
+  background-color: transparent;
+  height: 100%;
+  color: white !important;
+  padding: 0 !important;
+}
+
+.custom-hljs-user span {
+  color: white !important;
+}
+
