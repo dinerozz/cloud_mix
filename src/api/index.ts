@@ -1,17 +1,16 @@
-import axios from 'axios';
+import axios from "axios";
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_REACT_APP_API_BASE_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
-// insert auth token into headers
 axiosInstance.interceptors.request.use(async (reqConfig) => {
-  const authToken = localStorage.getItem('AUTH_TOKEN');
+  const authToken = localStorage.getItem("AUTH_TOKEN");
   if (authToken && reqConfig.headers) {
-    reqConfig.headers['Authorization'] = `Bearer ${authToken}`;
+    reqConfig.headers["Authorization"] = `Bearer ${authToken}`;
   }
 
   return reqConfig;

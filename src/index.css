@@ -9,29 +9,17 @@
   font-family: 'Libre Franklin', sans-serif;
 }
 
-.qr-layout {
-  max-width: 400px;
-  height: 400px;
+@keyframes typingAnimation {
+  0% { opacity: 0.3; }
+  50% { opacity: 1; }
+  100% { opacity: 0.3; }
 }
 
-.home-table {
-  width: 600px;
+.typing-indicator {
+  animation: typingAnimation 1.5s infinite; /* Анимация будет повторяться бесконечно с длительностью 1.5 секунды */
 }
 
-@media screen and (max-width: 425px) {
-  .qr-layout {
-    width: 350px;
-    height: fit-content;
-  }
-
-  .home-table {
-    width: 100%;
-    max-width: 90vw;
-  }
-}
-
-@media screen and (max-width: 375px) {
-  .qr-layout {
-    width: 275px;
-  }
+.custom-hljs {
+  background-color: #fff !important;
+  padding: 0 !important;
 }

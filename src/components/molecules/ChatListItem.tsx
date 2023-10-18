@@ -9,7 +9,7 @@ type TMessageListItemProps = {
   counter?: number;
 };
 
-export const MessageListItem: FC<TMessageListItemProps> = ({
+export const ChatListItem: FC<TMessageListItemProps> = ({
   title,
   message,
   time,
