@@ -1,6 +1,7 @@
 import React from "react";
 import Logo from "../../../public/assets/icons/Logo.svg";
 import { Header } from "antd/lib/layout/layout";
+import { Button } from "antd";
 
 export const AppHeader = () => {
   return (
@@ -8,9 +9,14 @@ export const AppHeader = () => {
       <div id="logo">
         <img src={Logo} alt="" className="max-w-full max-h-[92px]" />
       </div>
-      <div className="text-sm md:text-base">
+      <div className="text-sm md:text-base flex flex-col items-end">
         <p className="font-[500] mb-0 text-[18px]">Samurai Meow</p>
-        <p className="opacity-[0.5] text-right text-[16px]">Logout</p>
+        <Button
+          type="text"
+          className="opacity-[0.5] text-right text-[16px] p-0"
+        >
+          Logout
+        </Button>
       </div>
     </Header>
   );

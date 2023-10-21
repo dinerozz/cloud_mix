@@ -3,6 +3,6 @@ export type TMessageProps = {
     message: string;
     sender: string;
   };
-  key: number;
+  index: number;
   isUser: boolean;
 };

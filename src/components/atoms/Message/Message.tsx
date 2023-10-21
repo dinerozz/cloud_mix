@@ -3,11 +3,7 @@ import React, { FC, useEffect, useRef } from "react";
 import "highlight.js/styles/default.css";
 import { TMessageProps } from "./props";
 
-export const Message: FC<TMessageProps> = ({
-  content,
-  key: number,
-  isUser,
-}) => {
+export const Message: FC<TMessageProps> = ({ content, isUser, index }) => {
   const codeRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -21,8 +17,9 @@ export const Message: FC<TMessageProps> = ({
     : "self-start bg-white custom-hljs";
 
   return (
-    <p
-      className={`max-w-[500px] max-h-[500px] flex items-center px-6 py-3 text-[16px] w-fit rounded-[16px] font-[400] ${messageClassNames}`}
+    <div
+      key={index}
+      className={`duration-300 max-w-[500px] max-h-[500px] flex items-center px-6 py-3 text-[16px] w-fit rounded-[16px] font-[400] ${messageClassNames}`}
     >
       <pre className="whitespace-pre-wrap h-full w-full overflow-auto">
         <code
@@ -31,6 +28,6 @@ export const Message: FC<TMessageProps> = ({
           dangerouslySetInnerHTML={{ __html: content.message }}
         />
       </pre>
-    </p>
+    </div>
   );
 };

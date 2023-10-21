@@ -9,9 +9,9 @@ interface Routes extends NavigateProps {
   element: JSX.Element & NavigateProps;
 }
 
-export const publicRoutes = [
+export const privateRoutes = [
   {
-    path: "/",
+    path: "/chat",
     element: <DialogsPage />,
   },
 ];

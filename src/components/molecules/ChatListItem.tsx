@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { Button } from "antd";
 
 type TMessageListItemProps = {
   title: string;
@@ -7,6 +8,8 @@ type TMessageListItemProps = {
   isChecked: boolean;
   listItemBg?: string;
   counter?: number;
+  onClick?: (dialogId: string) => void;
+  isAssistant?: boolean;
 };
 
 export const ChatListItem: FC<TMessageListItemProps> = ({
@@ -16,10 +19,14 @@ export const ChatListItem: FC<TMessageListItemProps> = ({
   isChecked = false,
   listItemBg = "bg-white",
   counter = 1,
+  onClick = () => {},
+  isAssistant = false,
 }) => {
   return (
-    <div
-      className={`px-10 py-[20px] h-[90px] border-b-[1px] border-[#9AACB5] cursor-pointer hover:bg-white-gray duration-300 ${listItemBg}`}
+    <Button
+      type="text"
+      onClick={() => onClick(new Date().toString())}
+      className={`border-t-0 border-r-0 rounded-[0px] w-full outline-0 px-10 py-[20px] h-[90px] border-b-[1px] border-[#9AACB5] cursor-pointer hover:bg-white-gray duration-300 ${listItemBg}`}
     >
       <div className="flex justify-between items-center">
         <p className="text-[18px] font-[500] leading-[28px]">{title}</p>
@@ -37,6 +44,6 @@ export const ChatListItem: FC<TMessageListItemProps> = ({
           {time}
         </p>
       </div>
-    </div>
+    </Button>
   );
 };
