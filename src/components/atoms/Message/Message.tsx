@@ -1,15 +1,7 @@
 import hljs from "highlight.js";
 import React, { FC, useEffect, useRef } from "react";
 import "highlight.js/styles/default.css";
-
-type TMessageProps = {
-  content: {
-    message: string;
-    sender: string;
-  };
-  key: number;
-  isUser: boolean;
-};
+import { TMessageProps } from "./props";
 
 export const Message: FC<TMessageProps> = ({
   content,
@@ -25,7 +17,7 @@ export const Message: FC<TMessageProps> = ({
   }, [content.message]);
 
   const messageClassNames = isUser
-    ? "self-end bg-[#9969FF] custom-hljs-user"
+    ? "self-end bg-primary custom-hljs-user"
     : "self-start bg-white custom-hljs";
 
   return (

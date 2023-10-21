@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import Input from "antd/lib/input/Input";
-import { Button, Form, InputRef, Typography } from "antd";
+import { Button, Form, Typography } from "antd";
 import SendMessageIcon from "../../../public/assets/icons/SendMessageIcon.svg";
 import { MessageList } from "./MessageList";
-import { Message } from "../atoms/Message";
-import { chatApi } from "../../api/chatApi";
+import { chatApi } from "@/api/chatApi";
+import { Message } from "@/components/atoms/Message";
 
 enum EMessageSender {
   ChatGPT = "ChatGPT",
@@ -81,7 +81,7 @@ export const ChatContainer = () => {
   };
 
   return (
-    <div className="flex flex-col h-full overflow-y-auto">
+    <div className="flex flex-col overflow-y-auto">
       <MessageList>
         {messages.map((message, index) => (
           <Message

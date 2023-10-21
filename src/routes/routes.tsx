@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/named
-import { NavigateProps } from 'react-router-dom';
+import { NavigateProps } from "react-router-dom";
 
-import { Home } from '../components/pages/Home';
+import { DialogsPage } from "../components/pages/DialogsPage";
 import React from "react";
 
 interface Routes extends NavigateProps {
@@ -11,10 +11,7 @@ interface Routes extends NavigateProps {
 
 export const publicRoutes = [
   {
-    path: '/',
-    element: <Home />,
+    path: "/",
+    element: <DialogsPage />,
   },
 ];
-
-
-
