@@ -10,9 +10,7 @@ export const DialogsPage: FC = () => {
   const [selectedDialog, setSelectedDialog] = useState<string | null>(null);
   const isMobile = size?.width ? size.width < 768 : false;
 
-  console.log(selectedDialog, "dialog");
   const handleDialogSelect = (dialogId: string) => {
-    console.log(dialogId, "id");
     setSelectedDialog(dialogId);
   };
 
