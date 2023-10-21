@@ -4,11 +4,10 @@ module.exports = {
   mode: "jit",
   theme: {
     fontFamily: {
-      'sans': ['ui-sans-serif', 'system-ui'],
-      'general': ['Libre Franklin', 'sans-serif'],
+      'general': ['Inter', 'sans-serif'],
     },
     extend: {
-  
+
       colors: {
         'tomato': {
           600: '#dc2626',
@@ -43,15 +42,17 @@ module.exports = {
         'darker': 'rgb(0, 0, 0, 0.5)',
         'white-gray': '#efefef',
         'minion-yellow': '#D1FFC6',
-        primary: "#00040f",
-        secondary: "#00f6ff",
+        primary: "#9969FF",
+        secondary: "#9AACB5",
+        primaryChat: "#F2F1F4",
+        primaryText: "#180A29",
+        grayWhite: "#FBFBFB",
+        borderColor: "#9AACB5",
+        activeDialog: "#EDEBEF",
         dimWhite: "rgba(255, 255, 255, 0.7)",
         dimBlue: "rgba(9, 151, 124, 0.1)",
         'majorelle-blue': "#545AE8",
-        'alice-blue': '#EDF1F5'
-      },
-      fontFamily: {
-        poppins: ["Poppins", "sans-serif"],
+        'alice-blue': '#EDF1F5',
       },
     },
     screens: {

@@ -3,3 +3,6 @@ node_modules
 # idea files
 .idea
 .DS_Store
+
+# env
+.env

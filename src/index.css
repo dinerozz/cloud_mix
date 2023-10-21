@@ -1,37 +1,38 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 
 * {
   margin: 0;
   padding: 0;
-  font-family: 'Libre Franklin', sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
-.qr-layout {
-  max-width: 400px;
-  height: 400px;
+@keyframes typingAnimation {
+  0% { opacity: 0.3; }
+  50% { opacity: 1; }
+  100% { opacity: 0.3; }
 }
 
-.home-table {
-  width: 600px;
+.typing-indicator {
+  animation: typingAnimation 1.5s infinite; /* Анимация будет повторяться бесконечно с длительностью 1.5 секунды */
 }
 
-@media screen and (max-width: 425px) {
-  .qr-layout {
-    width: 350px;
-    height: fit-content;
-  }
-
-  .home-table {
-    width: 100%;
-    max-width: 90vw;
-  }
+.custom-hljs code {
+  background-color: #fff !important;
+  height: 100%;
+  padding: 0 !important;
 }
 
-@media screen and (max-width: 375px) {
-  .qr-layout {
-    width: 275px;
-  }
+.custom-hljs-user code {
+  background-color: transparent;
+  height: 100%;
+  color: white !important;
+  padding: 0 !important;
 }
+
+.custom-hljs-user span {
+  color: white !important;
+}
+
