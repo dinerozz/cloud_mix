@@ -1,14 +1,28 @@
-import React, { FC, useState } from "react";
+import React, { FC, useContext, useState } from "react";
 
 import { DialogsBox } from "@/components/organisms/DialogsBox";
 import { ChatBox } from "@/components/organisms/ChatBox";
 import { ChatLayout } from "@/components/templates/ChatLayout";
 import { useWindowSize } from "@/components/hooks/useWindowSize";
+import { AuthContext } from "@/context/authContext";
+import { useQuery } from "react-query";
+import { userApi } from "@/api/userApi";
+import { Spin } from "antd";
 
 export const DialogsPage: FC = () => {
   const size = useWindowSize();
   const [selectedDialog, setSelectedDialog] = useState<string | null>(null);
   const isMobile = size?.width ? size.width < 768 : false;
+  const { isLoggedIn, setUser } = useContext(AuthContext);
+
+  const { data: currentUser, isLoading } = useQuery(
+    "current-user",
+    () => userApi.getCurrentUser(),
+    {
+      enabled: isLoggedIn,
+      onSuccess: (res) => setUser({ id: res.id, username: res.username }),
+    }
+  );
 
   const handleDialogSelect = (dialogId: string) => {
     setSelectedDialog(dialogId);

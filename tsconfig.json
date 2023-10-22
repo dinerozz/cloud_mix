@@ -18,8 +18,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@components/*": ["src/components/*"],
-      "@assets/*": ["/public/assets/icons/*"]
+      "@/components/*": ["src/components/*"],
+      "@/assets/*": ["/public/assets/icons/*"]
     }
   },
   "include": ["src"],
