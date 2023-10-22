@@ -1,4 +1,4 @@
-import React, { FC, useContext, useState } from "react";
+import React, { FC, useContext, useEffect, useState } from "react";
 
 import { DialogsBox } from "@/components/organisms/DialogsBox";
 import { ChatBox } from "@/components/organisms/ChatBox";
@@ -7,7 +7,9 @@ import { useWindowSize } from "@/components/hooks/useWindowSize";
 import { AuthContext } from "@/context/authContext";
 import { useQuery } from "react-query";
 import { userApi } from "@/api/userApi";
-import { Spin } from "antd";
+import { io } from "socket.io-client";
+
+const socket = io("http://localhost:4000");
 
 export const DialogsPage: FC = () => {
   const size = useWindowSize();
@@ -23,6 +25,19 @@ export const DialogsPage: FC = () => {
       onSuccess: (res) => setUser({ id: res.id, username: res.username }),
     }
   );
+
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("Connected to server");
+    });
+    socket.on("disconnect", () => {
+      console.log("Disconnected from server");
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   const handleDialogSelect = (dialogId: string) => {
     setSelectedDialog(dialogId);
