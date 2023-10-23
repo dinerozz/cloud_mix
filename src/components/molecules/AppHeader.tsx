@@ -9,7 +9,7 @@ import { useRecoilState } from "recoil";
 import { userInfoState } from "@/store/authState";
 
 export const AppHeader = () => {
-  const [userInfo] = useRecoilState(userInfoState);
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
   const navigate = useNavigate();
 
   const logoutMutation = useMutation(async (userId: string) =>
@@ -17,7 +17,8 @@ export const AppHeader = () => {
   );
 
   const handleLogout = () => {
-    logoutMutation.mutate(userInfo.id);
+    logoutMutation.mutate(userInfo?.id ?? "");
+    setUserInfo(undefined);
     localStorage.removeItem("AUTH_TOKEN");
     localStorage.removeItem("REFRESH_TOKEN");
     navigate("/login");
@@ -29,7 +30,7 @@ export const AppHeader = () => {
         <img src={Logo} alt="" className="max-w-full max-h-[92px]" />
       </div>
       <div className="text-sm md:text-base flex flex-col items-end">
-        <p className="font-[500] mb-0 text-[18px]">{userInfo.username}</p>
+        <p className="font-[500] mb-0 text-[18px]">{userInfo?.username}</p>
         <Button
           type="text"
           className="opacity-[0.5] text-right text-[16px] p-0"

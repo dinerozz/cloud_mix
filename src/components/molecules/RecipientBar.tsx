@@ -5,9 +5,10 @@ import { SvgChevronLeftIcon } from "@/components/atoms/Icons";
 
 type TRecipientBarProps = {
   onBack?: () => void;
+  username: string;
 };
 
-export const RecipientBar: FC<TRecipientBarProps> = ({ onBack }) => {
+export const RecipientBar: FC<TRecipientBarProps> = ({ onBack, username }) => {
   const size = useWindowSize();
   const isMobile = size?.width ? size.width < 768 : false;
 
@@ -22,7 +23,7 @@ export const RecipientBar: FC<TRecipientBarProps> = ({ onBack }) => {
         />
         <div>
           <p className="text-[18px] font-[500] leading-[25px] m-0">
-            AI Assistant
+            {username || "AI Assistant"}
           </p>
           <p className="opacity-[0.5] text-[16px] font-[400] leading-[28px]">
             Online
@@ -34,7 +35,9 @@ export const RecipientBar: FC<TRecipientBarProps> = ({ onBack }) => {
 
   return (
     <div className="flex flex-col px-10 py-4 h-[90px] border-b-[1px] border-borderColor bg-white">
-      <p className="text-[18px] font-[500] leading-[28px]">AI Assistant</p>
+      <p className="text-[18px] font-[500] leading-[28px]">
+        {username || "AI Assistant"}
+      </p>
       <p className="opacity-[0.5] text-[16px] font-[400] leading-[28px]">
         Online
       </p>

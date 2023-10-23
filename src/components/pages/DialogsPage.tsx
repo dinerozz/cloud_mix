@@ -10,8 +10,6 @@ import { io } from "socket.io-client";
 import { useRecoilState } from "recoil";
 import { isLoggedInState, userInfoState } from "@/store/authState";
 
-const socket = io("http://localhost:4000");
-
 export const DialogsPage: FC = () => {
   const size = useWindowSize();
   const [selectedDialog, setSelectedDialog] = useState<string | null>(null);
@@ -28,23 +26,6 @@ export const DialogsPage: FC = () => {
     }
   );
 
-  useEffect(() => {
-    socket.on("connect", () => {
-      console.log("Connected to server");
-    });
-    socket.on("disconnect", () => {
-      console.log("Disconnected from server");
-    });
-
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
-
-  const handleDialogSelect = (dialogId: string) => {
-    setSelectedDialog(dialogId);
-  };
-
   const handleBack = () => {
     setSelectedDialog(null);
   };
@@ -54,7 +35,7 @@ export const DialogsPage: FC = () => {
       <div className="flex h-[calc(100vh-92px)] w-full border-t-[1px] border-borderColor bg-grayWhite mt-[92px]">
         {isMobile ? (
           selectedDialog === null ? (
-            <DialogsBox onDialogSelect={handleDialogSelect} />
+            <DialogsBox />
           ) : (
             <ChatBox onBack={handleBack} />
           )

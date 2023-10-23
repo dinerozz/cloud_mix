@@ -1,16 +1,18 @@
-import { atom } from "recoil";
+import { atom, selector } from "recoil";
+
+type TUserInfo = {
+  id: string;
+  username: string;
+};
 
 export const isLoggedInState = atom({
   key: "isLoggedInState",
   default: false,
 });
 
-export const userInfoState = atom({
+export const userInfoState = atom<TUserInfo | undefined>({
   key: "userInfoState",
-  default: {
-    id: "",
-    username: "",
-  },
+  default: undefined,
 });
 
 export const isInitializedState = atom({

@@ -6,12 +6,6 @@ import { TMessageProps } from "./props";
 export const Message: FC<TMessageProps> = ({ content, isUser, index }) => {
   const codeRef = useRef<HTMLElement>(null);
 
-  useEffect(() => {
-    if (codeRef.current) {
-      hljs.highlightBlock(codeRef.current);
-    }
-  }, [content.message]);
-
   const messageClassNames = isUser
     ? "self-end bg-primary custom-hljs-user"
     : "self-start bg-white custom-hljs";

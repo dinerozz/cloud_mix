@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import Input from "antd/lib/input/Input";
 import { Button, Form, Typography } from "antd";
 import SendMessageIcon from "../../../public/assets/icons/SendMessageIcon.svg";
 import { MessageList } from "./MessageList";
 import { chatApi } from "@/api/chatApi";
 import { Message } from "@/components/atoms/Message";
+import { io } from "socket.io-client";
+import { useRecoilValue } from "recoil";
+import { userInfoState } from "@/store/authState";
 
 enum EMessageSender {
   ChatGPT = "ChatGPT",
@@ -20,15 +23,59 @@ type TMessage = {
   sender: string;
 };
 
-export const ChatContainer = () => {
+type TChatContainerProps = {
+  dialogType: "ai" | "user";
+  chatId: string;
+};
+
+type TUserMessages = {
+  chatId: string;
+  userId: string;
+  text: string;
+};
+
+const socket = io("http://localhost:4000");
+
+export const ChatContainer: FC<TChatContainerProps> = ({
+  dialogType,
+  chatId,
+}) => {
+  const userInfo = useRecoilValue(userInfoState);
   const [form] = Form.useForm();
   const [typing, setTyping] = useState(false);
-  const [messages, setMessages] = useState<TMessage[]>([
+  const [aiMessages, setAiMessages] = useState<TMessage[]>([
     {
       message: "Hello, I am AI assistant!",
       sender: "AI Assistant",
     },
   ]);
+
+  const [userMessages, setUserMessages] = useState<TUserMessages[]>([
+    {
+      chatId,
+      userId: userInfo?.id ?? "",
+      text: "",
+    },
+  ]);
+
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("Connected to server");
+    });
+
+    socket.emit("joinChat", { chatId });
+
+    socket.on("newMessage", (message) => {
+      setUserMessages((prevMessages) => [...prevMessages, message]);
+    });
+    socket.on("disconnect", () => {
+      console.log("Disconnected from server");
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   const processMessageToChatGPT = async (chatMessages: TMessage[]) => {
     let apiMessages = chatMessages.map((messageObject) => {
@@ -52,7 +99,7 @@ export const ChatContainer = () => {
     };
 
     await chatApi.sendMessageToChatGPT(requestBody).then((res) => {
-      setMessages([
+      setAiMessages([
         ...chatMessages,
         { message: res.choices[0].message.content, sender: "AI Assistant" },
       ]);
@@ -65,31 +112,49 @@ export const ChatContainer = () => {
       return;
     }
 
-    const newMessage = {
-      message: values.message,
-      sender: "user",
-    };
+    if (dialogType === "ai") {
+      const newMessage = {
+        message: values.message,
+        sender: "user",
+      };
 
-    form.resetFields(["message"]);
+      form.resetFields(["message"]);
 
-    const newMessages = [...messages, newMessage]; // old messages + new message
+      const newMessages = [...aiMessages, newMessage]; // old messages + new message
 
-    setMessages(newMessages);
-    setTyping(true);
+      setAiMessages(newMessages);
+      setTyping(true);
 
-    await processMessageToChatGPT(newMessages);
+      await processMessageToChatGPT(newMessages);
+    } else if (dialogType === "user") {
+      form.resetFields(["message"]);
+
+      socket.emit("sendMessage", {
+        chatId,
+        userId: userInfo?.id ?? "",
+        text: values.message,
+      });
+    }
   };
 
   return (
     <div className="flex flex-col overflow-y-auto">
       <MessageList>
-        {messages.map((message, index) => (
-          <Message
-            isUser={message.sender !== "AI Assistant"}
-            key={index}
-            content={message}
-          />
-        ))}
+        {dialogType === "ai"
+          ? aiMessages.map((message, index) => (
+              <Message
+                isUser={message.sender !== "AI Assistant"}
+                index={index}
+                content={message}
+              />
+            ))
+          : userMessages.map((message, index) => (
+              <Message
+                isUser={message.userId === userInfo?.id}
+                index={index}
+                content={{ message: message.text, sender: message.userId }}
+              />
+            ))}
       </MessageList>
       <div className="flex justify-between items-center">
         <Form form={form} onFinish={handleSend} className="w-full">

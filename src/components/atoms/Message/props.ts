@@ -4,5 +4,5 @@ export type TMessageProps = {
     sender: string;
   };
   index: number;
-  isUser: boolean;
+  isUser?: boolean;
 };
