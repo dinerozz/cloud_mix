@@ -6,11 +6,11 @@ import { LoginOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
 import { authApi, TAuthRequest } from "@/api/authApi";
-import { AuthContext } from "@/context/authContext";
+import { useRecoilState } from "recoil";
+import { isLoggedInState } from "@/store/authState";
 
 export const LoginForm = () => {
   const navigate = useNavigate();
-  const { isLoggedIn } = useContext(AuthContext);
 
   const loginMutation = useMutation(
     async (payload: TAuthRequest) => authApi.login(payload),

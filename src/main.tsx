@@ -5,7 +5,7 @@ import ReactDOM from "react-dom/client";
 
 import "./index.css";
 import { AppRoutes } from "./routes/AppRoutes";
-import { AuthProvider } from "@/context/authContext";
+import { RecoilRoot } from "recoil";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,9 +21,9 @@ const queryClient = new QueryClient({
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
+      <RecoilRoot>
         <AppRoutes />
-      </AuthProvider>
+      </RecoilRoot>
     </QueryClientProvider>
   </React.StrictMode>
 );

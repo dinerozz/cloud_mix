@@ -1,14 +1,15 @@
-import React, { useContext } from "react";
+import React from "react";
 import Logo from "../../../public/assets/icons/Logo.svg";
 import { Header } from "antd/lib/layout/layout";
 import { Button, notification } from "antd";
-import { AuthContext } from "@/context/authContext";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
 import { authApi } from "@/api/authApi";
+import { useRecoilState } from "recoil";
+import { userInfoState } from "@/store/authState";
 
 export const AppHeader = () => {
-  const { userInfo } = useContext(AuthContext);
+  const [userInfo] = useRecoilState(userInfoState);
   const navigate = useNavigate();
 
   const logoutMutation = useMutation(async (userId: string) =>

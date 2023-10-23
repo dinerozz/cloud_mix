@@ -25,12 +25,6 @@ export const DialogsBox: FC<TDialogsBoxProps> = ({ onDialogSelect }) => {
         time="10:44"
         isChecked={true}
       />
-      <ChatListItem
-        title="Dragon Love"
-        message="Send nuds"
-        time="10:44"
-        isChecked={false}
-      />
     </div>
   );
 };

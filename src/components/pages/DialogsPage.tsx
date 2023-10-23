@@ -1,13 +1,14 @@
-import React, { FC, useContext, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 
 import { DialogsBox } from "@/components/organisms/DialogsBox";
 import { ChatBox } from "@/components/organisms/ChatBox";
 import { ChatLayout } from "@/components/templates/ChatLayout";
 import { useWindowSize } from "@/components/hooks/useWindowSize";
-import { AuthContext } from "@/context/authContext";
 import { useQuery } from "react-query";
 import { userApi } from "@/api/userApi";
 import { io } from "socket.io-client";
+import { useRecoilState } from "recoil";
+import { isLoggedInState, userInfoState } from "@/store/authState";
 
 const socket = io("http://localhost:4000");
 
@@ -15,7 +16,8 @@ export const DialogsPage: FC = () => {
   const size = useWindowSize();
   const [selectedDialog, setSelectedDialog] = useState<string | null>(null);
   const isMobile = size?.width ? size.width < 768 : false;
-  const { isLoggedIn, setUser } = useContext(AuthContext);
+  const [isLoggedIn] = useRecoilState(isLoggedInState);
+  const [, setUser] = useRecoilState(userInfoState);
 
   const { data: currentUser, isLoading } = useQuery(
     "current-user",

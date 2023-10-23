@@ -1,9 +1,22 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { privateRoutes, publicRoutes } from "./routes";
-import React from "react";
+import React, { useEffect } from "react";
 import { AuthWrapper } from "@/routes/AuthWrapper";
+import { useRecoilState } from "recoil";
+import { isInitializedState, isLoggedInState } from "@/store/authState";
 
 export const AppRoutes = () => {
+  const [, setIsLoggedIn] = useRecoilState(isLoggedInState);
+  const [, setIsInitialized] = useRecoilState(isInitializedState);
+
+  useEffect(() => {
+    const token = localStorage.getItem("AUTH_TOKEN");
+    if (token) {
+      setIsLoggedIn(true);
+    }
+    setIsInitialized(true);
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>

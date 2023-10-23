@@ -1,14 +1,16 @@
-import React, { FC, ReactNode, useContext } from "react";
+import React, { FC, ReactNode } from "react";
 import { Navigate, Route } from "react-router-dom";
-import { AuthContext } from "@/context/authContext";
 import { Spin } from "antd";
+import { useRecoilState } from "recoil";
+import { isInitializedState, isLoggedInState } from "@/store/authState";
 
 type TAuthWrapper = {
   children: ReactNode;
 };
 
 export const AuthWrapper: FC<TAuthWrapper> = ({ children }) => {
-  const { isLoggedIn, isInitialized } = useContext(AuthContext);
+  const [isLoggedIn] = useRecoilState(isLoggedInState);
+  const [isInitialized] = useRecoilState(isInitializedState);
 
   if (!isInitialized) return <Spin />;
 
