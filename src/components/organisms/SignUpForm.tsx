@@ -6,9 +6,12 @@ import { LoginOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
 import { authApi, TAuthRequest } from "@/api/authApi";
+import { useRecoilState } from "recoil";
+import { isLoggedInState } from "@/store/authState";
 
 export const SignUpForm = () => {
   const navigate = useNavigate();
+  const [, setIsLoggedInState] = useRecoilState(isLoggedInState);
 
   const signUpMutation = useMutation(
     async (payload: TAuthRequest) => authApi.signUp(payload),
@@ -16,6 +19,7 @@ export const SignUpForm = () => {
       onSuccess: (res) => {
         localStorage.setItem("AUTH_TOKEN", res.accessToken);
         localStorage.setItem("REFRESH_TOKEN", res.refreshToken);
+        setIsLoggedInState(true);
         notification.success({ message: "Success" });
         navigate("/chat");
       },

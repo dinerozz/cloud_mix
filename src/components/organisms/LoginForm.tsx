@@ -11,6 +11,7 @@ import { isLoggedInState } from "@/store/authState";
 
 export const LoginForm = () => {
   const navigate = useNavigate();
+  const [, setIsLoggedInState] = useRecoilState(isLoggedInState);
 
   const loginMutation = useMutation(
     async (payload: TAuthRequest) => authApi.login(payload),
@@ -18,6 +19,7 @@ export const LoginForm = () => {
       onSuccess: (res) => {
         localStorage.setItem("AUTH_TOKEN", res.accessToken);
         localStorage.setItem("REFRESH_TOKEN", res.refreshToken);
+        setIsLoggedInState(true);
         notification.success({ message: "Success" });
         navigate("/chat");
       },

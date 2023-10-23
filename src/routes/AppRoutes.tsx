@@ -6,7 +6,7 @@ import { useRecoilState } from "recoil";
 import { isInitializedState, isLoggedInState } from "@/store/authState";
 
 export const AppRoutes = () => {
-  const [, setIsLoggedIn] = useRecoilState(isLoggedInState);
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInState);
   const [, setIsInitialized] = useRecoilState(isInitializedState);
 
   useEffect(() => {
