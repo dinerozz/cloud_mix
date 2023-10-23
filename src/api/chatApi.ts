@@ -1,4 +1,5 @@
 import axios from "axios";
+import { api } from "@/api/index";
 
 type TChatGPTPayload = {
   model: string;
@@ -29,6 +30,15 @@ export type TChatGPTResponseObject = {
   usage: TUsage;
 };
 
+type TChatsResponse = {
+  id: string;
+  userId1: string;
+  userId2: string;
+  updatedAt: string;
+  createdAt: string;
+  otherUserName: string;
+};
+
 const sendMessageToChatGPT = (payload: TChatGPTPayload) =>
   axios
     .post<TChatGPTResponseObject>(
@@ -43,6 +53,10 @@ const sendMessageToChatGPT = (payload: TChatGPTPayload) =>
     )
     .then((res) => res.data);
 
+const getChats = () =>
+  api.get<TChatsResponse[]>("/api/v1/chat/all").then((res) => res.data);
+
 export const chatApi = {
   sendMessageToChatGPT,
+  getChats,
 };

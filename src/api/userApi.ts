@@ -14,7 +14,7 @@ const getCurrentUser = () =>
 
 const findByUsername = (username: string) =>
   api
-    .get<TUsersSearchResponse>(`/api/v1/users/search/${username}`)
+    .get<TUsersSearchResponse[]>(`/api/v1/users/search/${username}`)
     .then((res) => res.data);
 
 export const userApi = {

@@ -5,15 +5,21 @@ import Input from "antd/lib/input/Input";
 import { useQuery } from "react-query";
 import { userApi } from "@/api/userApi";
 import { debounce } from "lodash";
+import { useRecoilState } from "recoil";
+import { foundedChatsState, searchState } from "@/store/chatsState";
 
 export const DialogsBar = () => {
   const [isInputVisible, setIsInputVisible] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
+  const [, setFoundedChatsState] = useRecoilState(foundedChatsState);
+  const [searchValue, setSearchValue] = useRecoilState(searchState);
 
   const { data: users, isLoading: isUsersLoading } = useQuery(
     ["users-search", searchValue],
     () => userApi.findByUsername(searchValue),
-    { enabled: searchValue.length > 0 }
+    {
+      onSuccess: (res) => setFoundedChatsState(res),
+      enabled: searchValue.length > 0,
+    }
   );
 
   const handleSearch = debounce((value) => {
