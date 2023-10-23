@@ -52,8 +52,8 @@ export const ChatContainer: FC<TChatContainerProps> = ({
 
   const [userMessages, setUserMessages] = useState<TUserMessages[]>([
     {
-      chatId,
-      userId: userInfo?.id ?? "",
+      chatId: "",
+      userId: "",
       text: "",
     },
   ]);
@@ -65,6 +65,10 @@ export const ChatContainer: FC<TChatContainerProps> = ({
 
     socket.emit("joinChat", { chatId });
 
+    socket.on("chatHistory", (history) => {
+      setUserMessages(history);
+    });
+
     socket.on("newMessage", (message) => {
       setUserMessages((prevMessages) => [...prevMessages, message]);
     });
@@ -75,7 +79,7 @@ export const ChatContainer: FC<TChatContainerProps> = ({
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [chatId]);
 
   const processMessageToChatGPT = async (chatMessages: TMessage[]) => {
     let apiMessages = chatMessages.map((messageObject) => {
@@ -129,6 +133,7 @@ export const ChatContainer: FC<TChatContainerProps> = ({
     } else if (dialogType === "user") {
       form.resetFields(["message"]);
 
+      console.log("send message");
       socket.emit("sendMessage", {
         chatId,
         userId: userInfo?.id ?? "",
