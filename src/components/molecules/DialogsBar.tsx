@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Form } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { CloseOutlined, SearchOutlined } from "@ant-design/icons";
 import Input from "antd/lib/input/Input";
 import { useQuery } from "react-query";
 import { userApi } from "@/api/userApi";
@@ -45,7 +45,11 @@ export const DialogsBar = () => {
         className="flex items-center justify-center h-[38px]"
         onClick={() => setIsInputVisible((prev) => !prev)}
       >
-        <SearchOutlined rev={undefined} className="text-2xl" />
+        {isInputVisible ? (
+          <CloseOutlined rev={undefined} className="text-2xl" />
+        ) : (
+          <SearchOutlined rev={undefined} className="text-2xl" />
+        )}
       </Button>
     </div>
   );
