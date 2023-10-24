@@ -16,21 +16,20 @@ export const DialogsPage: FC = () => {
     navigate("/chat");
   };
 
+  const renderMobileView = () =>
+    chatId ? <ChatBox onBack={handleBack} /> : <DialogsBox />;
+
+  const renderDesktopView = () => (
+    <>
+      <DialogsBox />
+      <ChatBox />
+    </>
+  );
+
   return (
     <ChatLayout>
       <div className="flex h-[calc(100vh-92px)] w-full border-t-[1px] border-borderColor bg-grayWhite mt-[92px]">
-        {isMobile ? (
-          !chatId ? (
-            <DialogsBox />
-          ) : (
-            <ChatBox onBack={handleBack} />
-          )
-        ) : (
-          <>
-            <DialogsBox />
-            <ChatBox />
-          </>
-        )}
+        {isMobile ? renderMobileView() : renderDesktopView()}
       </div>
     </ChatLayout>
   );

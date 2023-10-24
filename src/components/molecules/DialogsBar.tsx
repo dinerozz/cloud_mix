@@ -22,6 +22,11 @@ export const DialogsBar = () => {
     }
   );
 
+  const toggleSearch = () => {
+    setSearchValue("");
+    setIsInputVisible((prev) => !prev);
+  };
+
   const handleSearch = debounce((value) => {
     setSearchValue(value);
   }, 300);
@@ -43,7 +48,7 @@ export const DialogsBar = () => {
       <Button
         type="text"
         className="flex items-center justify-center h-[38px]"
-        onClick={() => setIsInputVisible((prev) => !prev)}
+        onClick={toggleSearch}
       >
         {isInputVisible ? (
           <CloseOutlined rev={undefined} className="text-2xl" />
