@@ -11,7 +11,6 @@ import { isLoggedInState } from "@/store/authState";
 
 export const SignUpForm = () => {
   const navigate = useNavigate();
-  const [, setIsLoggedInState] = useRecoilState(isLoggedInState);
 
   const signUpMutation = useMutation(
     async (payload: TAuthRequest) => authApi.signUp(payload),

@@ -1,42 +1,35 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC } from "react";
 
 import { DialogsBox } from "@/components/organisms/DialogsBox";
 import { ChatBox } from "@/components/organisms/ChatBox";
 import { ChatLayout } from "@/components/templates/ChatLayout";
 import { useWindowSize } from "@/components/hooks/useWindowSize";
-import { useQuery } from "react-query";
-import { userApi } from "@/api/userApi";
-import { io } from "socket.io-client";
 import { useRecoilState } from "recoil";
-import { isLoggedInState, userInfoState } from "@/store/authState";
+import { selectedChatState } from "@/store/chatsState";
+
+const initialState = {
+  id: "",
+  userId1: "",
+  userId2: "",
+  updatedAt: "",
+  createdAt: "",
+  otherUserName: "",
+};
 
 export const DialogsPage: FC = () => {
   const size = useWindowSize();
-  const [selectedDialog, setSelectedDialog] = useState<string | null>(null);
+  const [selectedChat, setSelectedChat] = useRecoilState(selectedChatState);
   const isMobile = size?.width ? size.width < 768 : false;
-  const isLoggedIn = Boolean(localStorage.getItem("IS_LOGGED_IN"));
-  const [userInfo, setUser] = useRecoilState(userInfoState);
-
-  const { data: currentUser, isLoading } = useQuery(
-    "current-user",
-    () => userApi.getCurrentUser(),
-    {
-      enabled: isLoggedIn,
-      onSuccess: (res) => setUser({ id: res.id, username: res.username }),
-    }
-  );
-
-  console.log(userInfo, "userinfo");
 
   const handleBack = () => {
-    setSelectedDialog(null);
+    setSelectedChat(initialState);
   };
 
   return (
     <ChatLayout>
       <div className="flex h-[calc(100vh-92px)] w-full border-t-[1px] border-borderColor bg-grayWhite mt-[92px]">
         {isMobile ? (
-          selectedDialog === null ? (
+          selectedChat.id === "" ? (
             <DialogsBox />
           ) : (
             <ChatBox onBack={handleBack} />
