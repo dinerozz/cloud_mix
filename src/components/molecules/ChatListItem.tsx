@@ -10,7 +10,6 @@ type TMessageListItemProps = {
   counter?: number;
   onClick?: () => void;
   isAssistant?: boolean;
-  index: string;
 };
 
 export const ChatListItem: FC<TMessageListItemProps> = ({
@@ -22,11 +21,9 @@ export const ChatListItem: FC<TMessageListItemProps> = ({
   counter = 1,
   onClick = () => {},
   isAssistant = false,
-  index,
 }) => {
   return (
     <Button
-      key={index}
       type="text"
       onClick={onClick}
       className={`border-t-0 border-r-0 rounded-[0px] w-full outline-0 px-10 py-[20px] h-[90px] border-b-[1px] border-[#9AACB5] cursor-pointer hover:bg-white-gray duration-300 ${listItemBg}`}

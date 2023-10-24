@@ -25,11 +25,6 @@ type TMessage = {
   sender: string;
 };
 
-type TChatContainerProps = {
-  dialogType: "ai" | "user";
-  chatId: string;
-};
-
 type TUserMessages = {
   userId: string;
   text: string;
@@ -37,7 +32,7 @@ type TUserMessages = {
 
 const socket = io("http://localhost:4000");
 
-export const ChatContainer: FC<TChatContainerProps> = ({ dialogType }) => {
+export const ChatContainer = () => {
   const { id: chatId } = useParams();
   const userInfo = useRecoilValue(userInfoState);
   const [form] = Form.useForm();
@@ -104,7 +99,7 @@ export const ChatContainer: FC<TChatContainerProps> = ({ dialogType }) => {
 
     const requestBody = {
       model: "gpt-4",
-      messages: [systemMessage, ...apiMessages], // [message1, ...]
+      messages: [systemMessage, ...apiMessages],
     };
 
     await chatApi.sendMessageToChatGPT(requestBody).then((res) => {
@@ -121,7 +116,7 @@ export const ChatContainer: FC<TChatContainerProps> = ({ dialogType }) => {
       return;
     }
 
-    if (dialogType === "ai") {
+    if (chatId === "ai-assistant") {
       const newMessage = {
         message: values.message,
         sender: "user",
@@ -135,10 +130,8 @@ export const ChatContainer: FC<TChatContainerProps> = ({ dialogType }) => {
       setTyping(true);
 
       await processMessageToChatGPT(newMessages);
-    } else if (dialogType === "user") {
+    } else {
       form.resetFields(["message"]);
-
-      console.log("send message");
       socket.emit("sendMessage", {
         chatId,
         userId: userInfo?.id ?? "",
@@ -153,20 +146,18 @@ export const ChatContainer: FC<TChatContainerProps> = ({ dialogType }) => {
         <Spin size="large" className="flex items-center justify-center" />
       )}
       <MessageList>
-        {dialogType === "ai"
+        {chatId === "ai-assistant"
           ? aiMessages.map((message, index) => (
               <Message
-                key={index}
+                key={"ai-" + index}
                 isUser={message.sender !== "AI Assistant"}
-                index={index}
                 content={message}
               />
             ))
           : userMessages.map((message, index) => (
               <Message
-                key={message.userId}
+                key={"user" + index}
                 isUser={message.userId === userInfo?.id}
-                index={index}
                 content={{ message: message.text, sender: message.userId }}
               />
             ))}

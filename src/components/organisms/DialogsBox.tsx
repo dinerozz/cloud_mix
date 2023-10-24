@@ -11,7 +11,7 @@ import {
 import { useMutation, useQuery } from "react-query";
 import { chatApi, TInitializeChatRequest } from "@/api/chatApi";
 import { notification } from "antd";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const DialogsBox: FC = () => {
   const [foundedChats] = useRecoilState(foundedChatsState);
@@ -57,7 +57,7 @@ export const DialogsBox: FC = () => {
     <div className="flex-shrink-0 w-full md:w-1/3 sm:w-1/2 lg:w-1/4 border-r-[1px] border-borderColor">
       <DialogsBar />
       <ChatListItem
-        index={"ai-assistant"}
+        key={"ai-assistant"}
         onClick={() => handleDialogClick("ai-assistant")}
         title="AI Assistant"
         message="Hello, I am AI assistant"
@@ -70,7 +70,7 @@ export const DialogsBox: FC = () => {
         ? foundedChats.map((item) => (
             <ChatListItem
               onClick={() => handleDialogClick(item.id)}
-              index={item.id}
+              key={item.id}
               title={item.username}
               message="Yo bro I got some info for you"
               time="10:44"
@@ -80,7 +80,7 @@ export const DialogsBox: FC = () => {
         : chats?.map((item) => (
             <ChatListItem
               onClick={() => handleDialogClick(item.id)}
-              index={item.id}
+              key={item.id}
               title={item.otherUserName}
               message="Yo bro I got some info for you"
               time="10:44"

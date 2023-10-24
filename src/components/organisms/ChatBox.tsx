@@ -14,10 +14,7 @@ export const ChatBox: FC<TChatBoxProps> = ({ onBack }) => {
   return (
     <div className="flex-grow w-full bg-primaryChat flex flex-col justify-between">
       <RecipientBar username={selectedChat.otherUserName} onBack={onBack} />
-      <ChatContainer
-        key={selectedChat.id}
-        dialogType={selectedChat.id === "ai-assistant" ? "ai" : "user"}
-      />
+      <ChatContainer key={selectedChat.id} />
     </div>
   );
 };
