@@ -1,11 +1,11 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import Input from "antd/lib/input/Input";
 import { Button, Form, Spin, Typography } from "antd";
 import SendMessageIcon from "../../../public/assets/icons/SendMessageIcon.svg";
 import { MessageList } from "./MessageList";
 import { chatApi } from "@/api/chatApi";
 import { Message } from "@/components/atoms/Message";
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 import { useRecoilValue } from "recoil";
 import { userInfoState } from "@/store/authState";
 import { useQuery } from "react-query";
@@ -30,12 +30,13 @@ type TUserMessages = {
   text: string;
 };
 
-const socket = io("http://localhost:4000");
+const SOCKET_URL = "http://localhost:4000";
 
 export const ChatContainer = () => {
   const { id: chatId } = useParams();
   const userInfo = useRecoilValue(userInfoState);
   const [form] = Form.useForm();
+  const socketRef = useRef<Socket>(null);
   const [typing, setTyping] = useState(false);
   const [aiMessages, setAiMessages] = useState<TMessage[]>([
     {
@@ -43,7 +44,7 @@ export const ChatContainer = () => {
       sender: "AI Assistant",
     },
   ]);
-  console.log(chatId, "chatId");
+
   const [userMessages, setUserMessages] = useState<TUserMessages[]>([]);
 
   const { data: chatHistory, isLoading: isChatHistoryLoading } = useQuery(
@@ -56,27 +57,23 @@ export const ChatContainer = () => {
   );
 
   useEffect(() => {
-    setUserMessages([]);
-
-    socket.on("connect", () => {
-      console.log("Connected to server");
+    // @ts-ignore
+    socketRef.current = io(SOCKET_URL, {
+      query: { chatId },
     });
-
-    socket.emit("joinChat", { chatId });
-
-    // socket.on("chatHistory", (history) => {
-    //   setUserMessages(history);
-    // });
-
-    socket.on("newMessage", (message) => {
+    socketRef.current.on("connect", () => {
+      console.log("Connected to server");
+      socketRef.current?.emit("joinChat", { chatId });
+    });
+    socketRef.current.on("newMessage", (message) => {
       setUserMessages((prevMessages) => [...prevMessages, message]);
     });
-    socket.on("disconnect", () => {
+    socketRef.current.on("disconnect", () => {
       console.log("Disconnected from server");
     });
 
     return () => {
-      socket.disconnect();
+      socketRef.current?.disconnect();
     };
   }, [chatId]);
 
@@ -123,7 +120,7 @@ export const ChatContainer = () => {
 
       form.resetFields(["message"]);
 
-      const newMessages = [...aiMessages, newMessage]; // old messages + new message
+      const newMessages = [...aiMessages, newMessage];
 
       setAiMessages(newMessages);
       setTyping(true);
@@ -131,7 +128,7 @@ export const ChatContainer = () => {
       await processMessageToChatGPT(newMessages);
     } else {
       form.resetFields(["message"]);
-      socket.emit("sendMessage", {
+      socketRef.current?.emit("sendMessage", {
         chatId,
         userId: userInfo?.id ?? "",
         text: values.message,
