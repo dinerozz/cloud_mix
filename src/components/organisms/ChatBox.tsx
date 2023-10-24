@@ -16,7 +16,6 @@ export const ChatBox: FC<TChatBoxProps> = ({ onBack }) => {
       <RecipientBar username={selectedChat.otherUserName} onBack={onBack} />
       <ChatContainer
         key={selectedChat.id}
-        chatId={selectedChat.id}
         dialogType={selectedChat.id === "ai-assistant" ? "ai" : "user"}
       />
     </div>

@@ -4,6 +4,7 @@ import { DialogsPage } from "@/components/pages/DialogsPage";
 import React from "react";
 import { SignUp } from "@/components/pages/SignUp";
 import { Login } from "@/components/pages/Login";
+import { ChatBox } from "@/components/organisms/ChatBox";
 
 interface Routes extends NavigateProps {
   path: string;
@@ -13,6 +14,10 @@ interface Routes extends NavigateProps {
 export const privateRoutes = [
   {
     path: "/chat",
+    element: <DialogsPage />,
+  },
+  {
+    path: "/chat/:id",
     element: <DialogsPage />,
   },
 ];

@@ -9,6 +9,7 @@ import { io } from "socket.io-client";
 import { useRecoilValue } from "recoil";
 import { userInfoState } from "@/store/authState";
 import { useQuery } from "react-query";
+import { useParams } from "react-router-dom";
 
 enum EMessageSender {
   ChatGPT = "ChatGPT",
@@ -30,17 +31,14 @@ type TChatContainerProps = {
 };
 
 type TUserMessages = {
-  chatId: string;
   userId: string;
   text: string;
 };
 
 const socket = io("http://localhost:4000");
 
-export const ChatContainer: FC<TChatContainerProps> = ({
-  dialogType,
-  chatId,
-}) => {
+export const ChatContainer: FC<TChatContainerProps> = ({ dialogType }) => {
+  const { id: chatId } = useParams();
   const userInfo = useRecoilValue(userInfoState);
   const [form] = Form.useForm();
   const [typing, setTyping] = useState(false);
@@ -55,7 +53,7 @@ export const ChatContainer: FC<TChatContainerProps> = ({
 
   const { data: chatHistory, isLoading: isChatHistoryLoading } = useQuery(
     ["chat-history", chatId],
-    () => chatApi.getChatHistory(chatId),
+    () => chatApi.getChatHistory(chatId ?? ""),
     {
       onSuccess: (res) => setUserMessages(res),
       enabled: chatId !== "ai-assistant",
@@ -148,7 +146,7 @@ export const ChatContainer: FC<TChatContainerProps> = ({
       });
     }
   };
-  console.log(userMessages);
+
   return (
     <div className="flex flex-col overflow-y-auto">
       {isChatHistoryLoading && (

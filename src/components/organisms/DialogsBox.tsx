@@ -11,11 +11,14 @@ import {
 import { useMutation, useQuery } from "react-query";
 import { chatApi, TInitializeChatRequest } from "@/api/chatApi";
 import { notification } from "antd";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const DialogsBox: FC = () => {
   const [foundedChats] = useRecoilState(foundedChatsState);
   const [searchValue] = useRecoilState(searchState);
   const [selectedChat, setSelectedChat] = useRecoilState(selectedChatState);
+
+  const navigate = useNavigate();
 
   const { data: chats, isLoading: isChatsLoading } = useQuery(
     ["chat-list"],
@@ -41,9 +44,11 @@ export const DialogsBox: FC = () => {
         createdAt: "",
         otherUserName: "AI Assistant",
       };
+      navigate(`/chat/ai-assistant`);
       setSelectedChat(aiAssistantDialog);
     } else {
       const selectedDialog = chats?.find((chat) => chat.id === dialogId);
+      navigate(`/chat/${dialogId}`);
       setSelectedChat(selectedDialog as TSelectedChatState);
     }
   };

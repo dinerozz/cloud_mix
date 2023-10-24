@@ -27,7 +27,7 @@ export const searchState = atom({
 export const selectedChatState = atom<TSelectedChatState>({
   key: "selectedChatState",
   default: {
-    id: "",
+    id: "ai-assistant",
     userId1: "",
     userId2: "",
     updatedAt: "",
