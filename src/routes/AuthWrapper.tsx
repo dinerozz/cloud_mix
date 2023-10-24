@@ -9,7 +9,10 @@ type TAuthWrapper = {
 };
 
 export const AuthWrapper: FC<TAuthWrapper> = ({ children }) => {
-  const [isLoggedIn] = useRecoilState(isLoggedInState);
+  // const [isLoggedIn] = useRecoilState(isLoggedInState);
+  const isLoggedIn = Boolean(localStorage.getItem("IS_LOGGED_IN"));
+  console.log(isLoggedIn, "isLoggedIN");
+
   const [isInitialized] = useRecoilState(isInitializedState);
 
   if (!isInitialized) return <Spin />;

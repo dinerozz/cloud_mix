@@ -6,8 +6,8 @@ const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_REACT_APP_API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${accessToken}`,
   },
+  withCredentials: true,
 });
 
 // catch 401 -> refresh
@@ -17,20 +17,16 @@ axiosInstance.interceptors.response.use(
     const originalRequest = error.config;
 
     if (error.response.status === 401 && !originalRequest._retry) {
+      localStorage.removeItem("IS_LOGGED_IN");
       originalRequest._retry = true;
 
-      const refreshToken = localStorage.getItem("REFRESH_TOKEN");
-      const res = await axiosInstance.post("/api/v1/auth/refresh", {
-        refreshToken,
-      });
-      const newToken = res.data.accessToken;
-
-      localStorage.setItem("AUTH_TOKEN", newToken);
-      localStorage.setItem("REFRESH_TOKEN", res.data.refreshToken);
-
-      originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
-
-      return axiosInstance(originalRequest);
+      try {
+        await axiosInstance.post("/api/v1/auth/refresh");
+        localStorage.setItem("IS_LOGGED_IN", "true");
+        return axiosInstance(originalRequest);
+      } catch (refreshError) {
+        return Promise.reject(refreshError);
+      }
     }
 
     return Promise.reject(error);

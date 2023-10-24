@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
 import Input from "antd/lib/input/Input";
-import { Button, Form, Typography } from "antd";
+import { Button, Form, Spin, Typography } from "antd";
 import SendMessageIcon from "../../../public/assets/icons/SendMessageIcon.svg";
 import { MessageList } from "./MessageList";
 import { chatApi } from "@/api/chatApi";
@@ -8,6 +8,7 @@ import { Message } from "@/components/atoms/Message";
 import { io } from "socket.io-client";
 import { useRecoilValue } from "recoil";
 import { userInfoState } from "@/store/authState";
+import { useQuery } from "react-query";
 
 enum EMessageSender {
   ChatGPT = "ChatGPT",
@@ -50,24 +51,29 @@ export const ChatContainer: FC<TChatContainerProps> = ({
     },
   ]);
 
-  const [userMessages, setUserMessages] = useState<TUserMessages[]>([
+  const [userMessages, setUserMessages] = useState<TUserMessages[]>([]);
+
+  const { data: chatHistory, isLoading: isChatHistoryLoading } = useQuery(
+    ["chat-history", chatId],
+    () => chatApi.getChatHistory(chatId),
     {
-      chatId: "",
-      userId: "",
-      text: "",
-    },
-  ]);
+      onSuccess: (res) => setUserMessages(res),
+      enabled: chatId !== "ai-assistant",
+    }
+  );
 
   useEffect(() => {
+    setUserMessages([]);
+
     socket.on("connect", () => {
       console.log("Connected to server");
     });
 
     socket.emit("joinChat", { chatId });
 
-    socket.on("chatHistory", (history) => {
-      setUserMessages(history);
-    });
+    // socket.on("chatHistory", (history) => {
+    //   setUserMessages(history);
+    // });
 
     socket.on("newMessage", (message) => {
       setUserMessages((prevMessages) => [...prevMessages, message]);
@@ -77,6 +83,7 @@ export const ChatContainer: FC<TChatContainerProps> = ({
     });
 
     return () => {
+      socket.removeAllListeners();
       socket.disconnect();
     };
   }, [chatId]);
@@ -141,13 +148,17 @@ export const ChatContainer: FC<TChatContainerProps> = ({
       });
     }
   };
-
+  console.log(userMessages);
   return (
     <div className="flex flex-col overflow-y-auto">
+      {isChatHistoryLoading && (
+        <Spin size="large" className="flex items-center justify-center" />
+      )}
       <MessageList>
         {dialogType === "ai"
           ? aiMessages.map((message, index) => (
               <Message
+                key={index}
                 isUser={message.sender !== "AI Assistant"}
                 index={index}
                 content={message}
@@ -155,6 +166,7 @@ export const ChatContainer: FC<TChatContainerProps> = ({
             ))
           : userMessages.map((message, index) => (
               <Message
+                key={message.userId}
                 isUser={message.userId === userInfo?.id}
                 index={index}
                 content={{ message: message.text, sender: message.userId }}

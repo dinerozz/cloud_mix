@@ -74,8 +74,12 @@ const initializeChat = (payload: TInitializeChatRequest) =>
     .post<TInitializeChatResponse>("/api/v1/chat/initialize", payload)
     .then((res) => res.data);
 
+const getChatHistory = (chatId: string) =>
+  api.get(`/api/v1/chat/${chatId}/history`).then((res) => res.data);
+
 export const chatApi = {
   sendMessageToChatGPT,
   getChats,
   initializeChat,
+  getChatHistory,
 };

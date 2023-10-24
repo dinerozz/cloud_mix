@@ -17,9 +17,7 @@ export const SignUpForm = () => {
     async (payload: TAuthRequest) => authApi.signUp(payload),
     {
       onSuccess: (res) => {
-        localStorage.setItem("AUTH_TOKEN", res.accessToken);
-        localStorage.setItem("REFRESH_TOKEN", res.refreshToken);
-        setIsLoggedInState(true);
+        localStorage.setItem("IS_LOGGED_IN", "true");
         notification.success({ message: "Success" });
         navigate("/chat");
       },

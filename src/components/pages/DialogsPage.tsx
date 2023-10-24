@@ -14,8 +14,8 @@ export const DialogsPage: FC = () => {
   const size = useWindowSize();
   const [selectedDialog, setSelectedDialog] = useState<string | null>(null);
   const isMobile = size?.width ? size.width < 768 : false;
-  const [isLoggedIn] = useRecoilState(isLoggedInState);
-  const [, setUser] = useRecoilState(userInfoState);
+  const isLoggedIn = Boolean(localStorage.getItem("IS_LOGGED_IN"));
+  const [userInfo, setUser] = useRecoilState(userInfoState);
 
   const { data: currentUser, isLoading } = useQuery(
     "current-user",
@@ -25,6 +25,8 @@ export const DialogsPage: FC = () => {
       onSuccess: (res) => setUser({ id: res.id, username: res.username }),
     }
   );
+
+  console.log(userInfo, "userinfo");
 
   const handleBack = () => {
     setSelectedDialog(null);

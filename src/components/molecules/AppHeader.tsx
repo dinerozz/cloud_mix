@@ -1,7 +1,7 @@
 import React from "react";
 import Logo from "../../../public/assets/icons/Logo.svg";
 import { Header } from "antd/lib/layout/layout";
-import { Button, notification } from "antd";
+import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
 import { authApi } from "@/api/authApi";
@@ -19,8 +19,7 @@ export const AppHeader = () => {
   const handleLogout = () => {
     logoutMutation.mutate(userInfo?.id ?? "");
     setUserInfo(undefined);
-    localStorage.removeItem("AUTH_TOKEN");
-    localStorage.removeItem("REFRESH_TOKEN");
+    localStorage.removeItem("IS_LOGGED_IN");
     navigate("/login");
   };
 
