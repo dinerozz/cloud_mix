@@ -43,7 +43,7 @@ export const ChatContainer = () => {
       sender: "AI Assistant",
     },
   ]);
-
+  console.log(chatId, "chatId");
   const [userMessages, setUserMessages] = useState<TUserMessages[]>([]);
 
   const { data: chatHistory, isLoading: isChatHistoryLoading } = useQuery(
@@ -76,7 +76,6 @@ export const ChatContainer = () => {
     });
 
     return () => {
-      socket.removeAllListeners();
       socket.disconnect();
     };
   }, [chatId]);

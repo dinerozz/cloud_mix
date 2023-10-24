@@ -52,6 +52,11 @@ export type TInitializeChatRequest = {
   userId2: string;
 };
 
+type TChatRecipientResponse = {
+  id: string;
+  username: string;
+};
+
 const sendMessageToChatGPT = (payload: TChatGPTPayload) =>
   axios
     .post<TChatGPTResponseObject>(
@@ -77,9 +82,15 @@ const initializeChat = (payload: TInitializeChatRequest) =>
 const getChatHistory = (chatId: string) =>
   api.get(`/api/v1/chat/${chatId}/history`).then((res) => res.data);
 
+const getChatParticipant = (chatId: string) =>
+  api
+    .get<TChatRecipientResponse>(`/api/v1/chat/${chatId}/participant`)
+    .then((res) => res.data);
+
 export const chatApi = {
   sendMessageToChatGPT,
   getChats,
   initializeChat,
   getChatHistory,
+  getChatParticipant,
 };
