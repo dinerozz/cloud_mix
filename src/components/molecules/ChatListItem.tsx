@@ -18,10 +18,11 @@ export const ChatListItem: FC<TMessageListItemProps> = ({
   time,
   isChecked = false,
   listItemBg = "bg-white",
-  counter = 1,
+  counter = 0,
   onClick = () => {},
   isAssistant = false,
 }) => {
+  console.log(counter);
   return (
     <Button
       type="text"
@@ -30,7 +31,7 @@ export const ChatListItem: FC<TMessageListItemProps> = ({
     >
       <div className="flex justify-between items-center">
         <p className="text-[18px] font-[500] leading-[28px]">{title}</p>
-        {isChecked && (
+        {!isChecked && counter > 0 && (
           <div className="bg-[#9969FF] text-white w-6 h-6 rounded-full px-[8.5px] py-[2px]">
             {counter}
           </div>

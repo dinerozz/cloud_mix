@@ -1,15 +1,15 @@
-import React, { FC, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Input from "antd/lib/input/Input";
-import { Button, Form, Spin, Typography } from "antd";
+import { Button, Form, Typography } from "antd";
 import SendMessageIcon from "../../../public/assets/icons/SendMessageIcon.svg";
 import { MessageList } from "./MessageList";
 import { chatApi } from "@/api/chatApi";
 import { Message } from "@/components/atoms/Message";
 import { io, Socket } from "socket.io-client";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { userInfoState } from "@/store/authState";
-import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
+import { allChatsState } from "@/store/chatsState";
 
 enum EMessageSender {
   ChatGPT = "ChatGPT",
@@ -38,23 +38,14 @@ export const ChatContainer = () => {
   const [form] = Form.useForm();
   const socketRef = useRef<Socket>(null);
   const [typing, setTyping] = useState(false);
+  const [, setAllChats] = useRecoilState(allChatsState);
+  const [userMessages, setUserMessages] = useState<TUserMessages[]>([]);
   const [aiMessages, setAiMessages] = useState<TMessage[]>([
     {
       message: "Hello, I am AI assistant!",
       sender: "AI Assistant",
     },
   ]);
-
-  const [userMessages, setUserMessages] = useState<TUserMessages[]>([]);
-
-  const { data: chatHistory, isLoading: isChatHistoryLoading } = useQuery(
-    ["chat-history", chatId],
-    () => chatApi.getChatHistory(chatId ?? ""),
-    {
-      onSuccess: (res) => setUserMessages(res),
-      enabled: chatId !== "ai-assistant",
-    }
-  );
 
   useEffect(() => {
     // @ts-ignore
@@ -64,10 +55,24 @@ export const ChatContainer = () => {
     socketRef.current.on("connect", () => {
       console.log("Connected to server");
       socketRef.current?.emit("joinChat", { chatId });
+      socketRef.current?.emit("getChatHistory", {
+        chatId,
+        userId: userInfo?.id,
+      });
     });
+
+    socketRef.current.on("chatHistory", (chatHistory) => {
+      setUserMessages(chatHistory);
+    });
+
     socketRef.current.on("newMessage", (message) => {
       setUserMessages((prevMessages) => [...prevMessages, message]);
     });
+
+    socketRef.current.on("updateDialogList", (updatedDialogList) => {
+      setAllChats(updatedDialogList);
+    });
+
     socketRef.current.on("disconnect", () => {
       console.log("Disconnected from server");
     });
@@ -138,9 +143,6 @@ export const ChatContainer = () => {
 
   return (
     <div className="flex flex-col overflow-y-auto">
-      {isChatHistoryLoading && (
-        <Spin size="large" className="flex items-center justify-center" />
-      )}
       <MessageList>
         {chatId === "ai-assistant"
           ? aiMessages.map((message, index) => (

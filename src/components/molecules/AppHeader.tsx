@@ -18,7 +18,7 @@ export const AppHeader = () => {
     authApi.logout(userId)
   );
 
-  const { data: currentUser, isLoading } = useQuery(
+  const { isLoading } = useQuery(
     "current-user",
     () => userApi.getCurrentUser(),
     {

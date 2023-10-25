@@ -2,7 +2,11 @@ import React, { FC, useCallback } from "react";
 import { DialogsBar } from "@/components/molecules/DialogsBar";
 import { ChatListItem } from "@/components/molecules/ChatListItem";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { foundedChatsState, searchState } from "@/store/chatsState";
+import {
+  allChatsState,
+  foundedChatsState,
+  searchState,
+} from "@/store/chatsState";
 import { useMutation, useQuery } from "react-query";
 import { chatApi, TInitializeChatRequest } from "@/api/chatApi";
 import { notification } from "antd";
@@ -14,14 +18,17 @@ export const DialogsBox: FC = () => {
   const [foundedChats] = useRecoilState(foundedChatsState);
   const [searchValue] = useRecoilState(searchState);
   const userInfo = useRecoilValue(userInfoState);
+  const [allChats, setAllChats] = useRecoilState(allChatsState);
 
   const navigate = useNavigate();
 
-  const {
-    data: chats,
-    isLoading: isChatsLoading,
-    refetch: refetchChats,
-  } = useQuery(["chat-list"], () => chatApi.getChats());
+  const { isLoading: isChatsLoading, refetch: refetchChats } = useQuery(
+    ["chat-list"],
+    () => chatApi.getChats(),
+    {
+      onSuccess: (res) => setAllChats(res),
+    }
+  );
 
   const initializeChatMutation = useMutation(
     (payload: TInitializeChatRequest) => chatApi.initializeChat(payload),
@@ -33,7 +40,7 @@ export const DialogsBox: FC = () => {
   );
 
   const findExistingChat = (currentUserId: string, dialogId: string) =>
-    chats?.find(
+    allChats?.find(
       (chat) =>
         (chat.userId1 === currentUserId && chat.userId2 === dialogId) ||
         (chat.userId1 === dialogId && chat.userId2 === currentUserId)
@@ -62,7 +69,7 @@ export const DialogsBox: FC = () => {
         navigate(`/chat/${dialogId}`);
       }
     },
-    [chats, userInfo, initializeChatMutation, refetchChats, navigate]
+    [allChats, userInfo, initializeChatMutation, refetchChats, navigate]
   );
 
   return (
@@ -88,19 +95,20 @@ export const DialogsBox: FC = () => {
               onClick={() => handleDialogClick(item.id, true)}
               key={item.id}
               title={item.username}
-              message="Yo bro I got some info for you"
+              message=""
               time="10:44"
               isChecked={true}
             />
           ))
-        : chats?.map((item) => (
+        : allChats?.map((item) => (
             <ChatListItem
               onClick={() => handleDialogClick(item.id, false)}
               key={item.id}
               title={item.otherUserName}
-              message="Yo bro I got some info for you"
+              message={item.lastMessage}
+              counter={item.unreadCount}
               time="10:44"
-              isChecked={true}
+              isChecked={item.unreadCount === 0}
             />
           ))}
     </div>

@@ -1,11 +1,7 @@
 import React, { FC } from "react";
 import DogIcon from "@/components/atoms/Icons/DogIcon";
 import { Empty } from "antd";
-
-export type TEmptyStateProps = {
-  className?: string;
-  description?: string;
-};
+import { TEmptyStateProps } from "@/components/atoms/EmptyState/props";
 
 export const EmptyState: FC<TEmptyStateProps> = ({
   className = "flex-grow w-full bg-primaryChat flex items-center justify-center",

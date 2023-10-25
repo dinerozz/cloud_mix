@@ -30,13 +30,15 @@ export type TChatGPTResponseObject = {
   usage: TUsage;
 };
 
-type TChatsResponse = {
+export type TChatsResponse = {
   id: string;
   userId1: string;
   userId2: string;
   updatedAt: string;
   createdAt: string;
   otherUserName: string;
+  lastMessage: string;
+  unreadCount: number;
 };
 
 type TInitializeChatResponse = {
