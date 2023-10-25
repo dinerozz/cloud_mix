@@ -1,5 +1,5 @@
 import React, { FC, ReactNode } from "react";
-import { Navigate, Route } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { Spin } from "antd";
 import { useRecoilState } from "recoil";
 import { isInitializedState } from "@/store/authState";

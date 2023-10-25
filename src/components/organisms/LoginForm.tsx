@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Button, Form, notification, Typography } from "antd";
 import FormItem from "antd/lib/form/FormItem";
 import Input from "antd/lib/input/Input";
@@ -6,23 +6,20 @@ import { LoginOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
 import { authApi, TAuthRequest } from "@/api/authApi";
-import { useRecoilState } from "recoil";
-import { isLoggedInState } from "@/store/authState";
 
 export const LoginForm = () => {
   const navigate = useNavigate();
-  const [, setIsLoggedInState] = useRecoilState(isLoggedInState);
 
   const loginMutation = useMutation(
     async (payload: TAuthRequest) => authApi.login(payload),
     {
-      onSuccess: (res) => {
+      onSuccess: () => {
         localStorage.setItem("IS_LOGGED_IN", "true");
         notification.success({ message: "Success" });
         navigate("/chat");
       },
       onError: () => notification.error({ message: "Something went wrong" }),
-    }
+    },
   );
 
   const onFinish = (values: TAuthRequest) => {
@@ -80,7 +77,7 @@ export const LoginForm = () => {
         </Button>
       </Form.Item>
       <Button className="mt-2" type="text" onClick={() => navigate("/")}>
-        Doesn't have account?
+        Don't have account?
       </Button>
     </Form>
   );

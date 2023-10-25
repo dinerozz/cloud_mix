@@ -10,11 +10,10 @@ import {
 import { useMutation, useQuery } from "react-query";
 import { chatApi, TInitializeChatRequest } from "@/api/chatApi";
 import { notification } from "antd";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { userInfoState } from "@/store/authState";
 
 export const DialogsBox: FC = () => {
-  const { id: chatId } = useParams();
   const [foundedChats] = useRecoilState(foundedChatsState);
   const [searchValue] = useRecoilState(searchState);
   const userInfo = useRecoilValue(userInfoState);
@@ -23,13 +22,13 @@ export const DialogsBox: FC = () => {
 
   const navigate = useNavigate();
 
-  const { isLoading: isChatsLoading, refetch: refetchChats } = useQuery(
+  const { refetch: refetchChats } = useQuery(
     ["chat-list"],
     () => chatApi.getChats(),
     {
       onSuccess: (res) => setAllChats(res),
       // refetchInterval: 5000,
-    }
+    },
   );
 
   const initializeChatMutation = useMutation(
@@ -38,14 +37,14 @@ export const DialogsBox: FC = () => {
       onSuccess: () =>
         notification.success({ message: "Conversation created successfully" }),
       onError: () => notification.error({ message: "Something went wrong" }),
-    }
+    },
   );
 
   const findExistingChat = (currentUserId: string, dialogId: string) =>
     allChats?.find(
       (chat) =>
         (chat.userId1 === currentUserId && chat.userId2 === dialogId) ||
-        (chat.userId1 === dialogId && chat.userId2 === currentUserId)
+        (chat.userId1 === dialogId && chat.userId2 === currentUserId),
     );
 
   const handleDialogClick = useCallback(
@@ -65,7 +64,7 @@ export const DialogsBox: FC = () => {
                 setActiveChat(res.id);
                 navigate(`/chat/${res.id}`);
               },
-            }
+            },
           );
         }
       } else {
@@ -73,7 +72,7 @@ export const DialogsBox: FC = () => {
         navigate(`/chat/${dialogId}`);
       }
     },
-    [allChats, userInfo, initializeChatMutation, refetchChats, navigate]
+    [allChats, userInfo, initializeChatMutation, refetchChats, navigate],
   );
 
   return (

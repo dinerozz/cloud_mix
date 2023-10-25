@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Form } from "antd";
+import { Button } from "antd";
 import { CloseOutlined, SearchOutlined } from "@ant-design/icons";
 import Input from "antd/lib/input/Input";
 import { useQuery } from "react-query";
@@ -24,7 +24,7 @@ export const DialogsBar = () => {
     {
       onSuccess: (res) => setFoundedChatsState(res),
       enabled: searchValue.length > 0,
-    }
+    },
   );
 
   const toggleSearch = () => {

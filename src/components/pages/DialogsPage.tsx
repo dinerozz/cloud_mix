@@ -1,4 +1,4 @@
-import React, { FC, RefObject, useEffect, useRef } from "react";
+import React, { FC } from "react";
 
 import { DialogsBox } from "@/components/organisms/DialogsBox";
 import { ChatBox } from "@/components/organisms/ChatBox";

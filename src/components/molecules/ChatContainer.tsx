@@ -48,7 +48,8 @@ export const ChatContainer = () => {
   ]);
 
   useEffect(() => {
-    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-expect-error
     socketRef.current = io(SOCKET_URL, {
       query: { chatId },
     });
@@ -83,7 +84,7 @@ export const ChatContainer = () => {
   }, [chatId]);
 
   const processMessageToChatGPT = async (chatMessages: TMessage[]) => {
-    let apiMessages = chatMessages.map((messageObject) => {
+    const apiMessages = chatMessages.map((messageObject) => {
       let role = "";
       if (messageObject.sender === EMessageSender.ChatGPT) {
         role = ERole.Assistant;

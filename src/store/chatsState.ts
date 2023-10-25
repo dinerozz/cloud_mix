@@ -1,6 +1,5 @@
 import { atom } from "recoil";
 import { TChatsResponse } from "@/api/chatApi";
-import { Socket } from "socket.io-client";
 
 type TFoundedChats = {
   id: string;
