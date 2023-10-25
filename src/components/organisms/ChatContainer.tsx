@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Input from "antd/lib/input/Input";
 import { Button, Form, Typography } from "antd";
 import SendMessageIcon from "../../../public/assets/icons/SendMessageIcon.svg";
-import { MessageList } from "./MessageList";
+import { MessageList } from "../molecules/MessageList";
 import { chatApi } from "@/api/chatApi";
 import { Message } from "@/components/atoms/Message";
 import { io, Socket } from "socket.io-client";
@@ -30,7 +30,8 @@ type TUserMessages = {
   text: string;
 };
 
-const SOCKET_URL = "http://localhost:4000";
+const SOCKET_URL =
+  import.meta.env.VITE_REACT_APP_API_BASE_URL || "http://localhost:4000";
 
 export const ChatContainer = () => {
   const { id: chatId } = useParams();

@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { RecipientBar } from "@/components/molecules/RecipientBar";
-import { ChatContainer } from "@/components/molecules/ChatContainer";
+import { ChatContainer } from "@/components/organisms/ChatContainer";
 import { useParams } from "react-router-dom";
 import { EmptyState } from "@/components/atoms/EmptyState";
 
