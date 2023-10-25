@@ -13,7 +13,7 @@ export const DialogsBar = () => {
   const [, setFoundedChatsState] = useRecoilState(foundedChatsState);
   const [searchValue, setSearchValue] = useRecoilState(searchState);
 
-  const { data: users, isLoading: isUsersLoading } = useQuery(
+  useQuery(
     ["users-search", searchValue],
     () => userApi.findByUsername(searchValue),
     {

@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from "react";
+import React, { FC, useCallback, useState } from "react";
 import { DialogsBar } from "@/components/molecules/DialogsBar";
 import { ChatListItem } from "@/components/molecules/ChatListItem";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -19,6 +19,7 @@ export const DialogsBox: FC = () => {
   const [searchValue] = useRecoilState(searchState);
   const userInfo = useRecoilValue(userInfoState);
   const [allChats, setAllChats] = useRecoilState(allChatsState);
+  const [activeChat, setActiveChat] = useState<string | null>(null);
 
   const navigate = useNavigate();
 
@@ -60,12 +61,14 @@ export const DialogsBox: FC = () => {
             {
               onSuccess: (res) => {
                 refetchChats();
+                setActiveChat(res.id);
                 navigate(`/chat/${res.id}`);
               },
             }
           );
         }
       } else {
+        setActiveChat(dialogId);
         navigate(`/chat/${dialogId}`);
       }
     },
@@ -85,6 +88,7 @@ export const DialogsBox: FC = () => {
           message="Hello, I am AI assistant"
           time="10:44"
           listItemBg="bg-activeDialog"
+          isActive={activeChat === "ai-assistant"}
           isChecked
           isAssistant
         />
@@ -98,6 +102,7 @@ export const DialogsBox: FC = () => {
               message=""
               time="10:44"
               isChecked={true}
+              isActive={item.id === activeChat}
             />
           ))
         : allChats?.map((item) => (
@@ -109,6 +114,7 @@ export const DialogsBox: FC = () => {
               counter={item.unreadCount}
               time="10:44"
               isChecked={item.unreadCount === 0}
+              isActive={item.id === activeChat}
             />
           ))}
     </div>
