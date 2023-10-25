@@ -5,13 +5,18 @@ import Input from "antd/lib/input/Input";
 import { useQuery } from "react-query";
 import { userApi } from "@/api/userApi";
 import { debounce } from "lodash";
-import { useRecoilState } from "recoil";
-import { foundedChatsState, searchState } from "@/store/chatsState";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  allChatsState,
+  foundedChatsState,
+  searchState,
+} from "@/store/chatsState";
 
 export const DialogsBar = () => {
   const [isInputVisible, setIsInputVisible] = useState(false);
   const [, setFoundedChatsState] = useRecoilState(foundedChatsState);
   const [searchValue, setSearchValue] = useRecoilState(searchState);
+  const allChats = useRecoilValue(allChatsState);
 
   useQuery(
     ["users-search", searchValue],
@@ -31,6 +36,8 @@ export const DialogsBar = () => {
     setSearchValue(value);
   }, 300);
 
+  const dialogsCount = allChats.length + 1;
+
   return (
     <div className="px-10 py-[30px] h-[90px] border-b-[1px] border-borderColor flex items-center justify-between gap-4">
       {isInputVisible ? (
@@ -42,7 +49,7 @@ export const DialogsBar = () => {
         />
       ) : (
         <p className="transition-all duration-300 ease-in-out md:text-[28px] text-[20px] leading-[28px]">
-          Messages(3)
+          Messages({dialogsCount})
         </p>
       )}
       <Button

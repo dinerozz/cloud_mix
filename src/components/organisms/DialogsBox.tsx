@@ -28,6 +28,7 @@ export const DialogsBox: FC = () => {
     () => chatApi.getChats(),
     {
       onSuccess: (res) => setAllChats(res),
+      // refetchInterval: 5000,
     }
   );
 

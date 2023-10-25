@@ -54,7 +54,7 @@ export const ChatContainer = () => {
     });
     socketRef.current.on("connect", () => {
       console.log("Connected to server");
-      socketRef.current?.emit("joinChat", { chatId });
+      socketRef.current?.emit("joinChat", { chatId, userId: userInfo?.id });
       socketRef.current?.emit("getChatHistory", {
         chatId,
         userId: userInfo?.id,
@@ -154,7 +154,7 @@ export const ChatContainer = () => {
             ))
           : userMessages.map((message, index) => (
               <Message
-                key={"user" + index}
+                key={"user-" + index}
                 isUser={message.userId === userInfo?.id}
                 content={{ message: message.text, sender: message.userId }}
               />
