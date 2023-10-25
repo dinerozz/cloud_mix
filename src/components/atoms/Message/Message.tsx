@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef } from "react";
+import React, { FC, useRef } from "react";
 import "highlight.js/styles/default.css";
 import { TMessageProps } from "./props";
 

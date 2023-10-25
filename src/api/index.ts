@@ -1,7 +1,5 @@
 import axios from "axios";
 
-const accessToken = localStorage.getItem("AUTH_TOKEN");
-
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_REACT_APP_API_BASE_URL,
   headers: {
@@ -30,7 +28,7 @@ axiosInstance.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export const api = axiosInstance;
